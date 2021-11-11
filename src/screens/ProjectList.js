@@ -3,14 +3,15 @@ import {View, FlatList, StyleSheet, Alert} from 'react-native';
 import Header from './../containers/Header';
 import ListItem from './../containers/ListItem';
 import AddItem from './../containers/AddItem';
+import uuid from 'react-native-uuid';
 
 const ProjectList = () => {
   const [inputText, setInputText] = useState('');
   const [items, setItems] = useState([
-    {id: '123', title: 'new Project'},
-    {id: '234', title: 'new Project 002'},
-    {id: '345', title: 'new Project 003'},
-    {id: '456', title: 'new Project 004'},
+    {id: uuid.v4(), title: 'new Project'},
+    {id: uuid.v4(), title: 'new Project 002'},
+    {id: uuid.v4(), title: 'new Project 003'},
+    {id: uuid.v4(), title: 'new Project 004'},
   ]);
 
   const deleteItem = id => {
@@ -25,7 +26,7 @@ const ProjectList = () => {
     } else {
       setInputText('');
       setItems(prevItems => {
-        return [{id: '1123', title}, ...prevItems];
+        return [{id: uuid.v4(), title}, ...prevItems];
       });
     }
   };

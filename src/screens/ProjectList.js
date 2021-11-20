@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
-import {View, FlatList, StyleSheet, Alert} from 'react-native';
+import React, {useState, useContext} from 'react';
+import {View, FlatList, StyleSheet, Alert, Button} from 'react-native';
 import Header from './../containers/Header';
 import ListItem from './../containers/ListItem';
 import AddItem from './../containers/AddItem';
 import uuid from 'react-native-uuid';
+import {UserContext} from '../hooks/UserContext';
 
 const ProjectList = () => {
   const [inputText, setInputText] = useState('');
@@ -13,6 +14,7 @@ const ProjectList = () => {
     {id: uuid.v4(), title: 'new Project 003'},
     {id: uuid.v4(), title: 'new Project 004'},
   ]);
+  const {signOut} = useContext(UserContext);
 
   const deleteItem = id => {
     setItems(prevItems => {
@@ -45,6 +47,7 @@ const ProjectList = () => {
           <ListItem item={item} deleteItem={deleteItem} />
         )}
       />
+      <Button title="Go to Details" onPress={signOut} />
     </View>
   );
 };

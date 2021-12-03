@@ -1,11 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 
-const ListItem = ({item, deleteItem}) => {
+const TaskItem = ({item, navigation}) => {
   return (
     <TouchableOpacity
       style={styles.listItem}
-      onPress={() => deleteItem(item.id)}>
+      onPress={() => navigation.navigate('Task', {item: {item}})}>
       <View style={styles.listItemView}>
         <Text style={styles.listItemTitle}>{item.title}</Text>
       </View>
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListItem;
+export default TaskItem;

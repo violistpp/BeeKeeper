@@ -8,18 +8,19 @@ import {
 } from 'react-native';
 
 const AddItem = ({addItem, inputText, setInputText}) => {
-
   const onChange = textValue => setInputText(textValue);
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         value={inputText}
-        placeholder="Add Item..."
+        placeholder="Add New Project..."
         onChangeText={onChange}
         style={styles.input}
       />
-      <TouchableOpacity onPress={() => addItem(inputText)} style={styles.btn}>
+      <TouchableOpacity
+        onPress={() => addItem(inputText)}
+        style={styles.addBtn}>
         <Text style={styles.btnText}>Add</Text>
       </TouchableOpacity>
     </View>
@@ -27,12 +28,17 @@ const AddItem = ({addItem, inputText, setInputText}) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+  },
   input: {
+    width: '85%',
     height: 60,
     padding: 8,
     fontSize: 16,
   },
-  btn: {
+  addBtn: {
+    width: '15%',
     backgroundColor: '#c2bad8',
     padding: 9,
     margin: 5,

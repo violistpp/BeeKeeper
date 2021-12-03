@@ -1,15 +1,15 @@
 import React, {useState, useContext} from 'react';
 import {View, FlatList, StyleSheet, Alert, Button} from 'react-native';
-import Header from './../containers/Header';
-import ListItem from './../containers/ListItem';
-import AddItem from './../containers/AddItem';
+import Header from '../containers/Header';
+import ProjectItem from '../containers/ProjectItem';
+import AddItem from '../containers/AddItem';
 import uuid from 'react-native-uuid';
 import {UserContext} from '../hooks/UserContext';
 
-const ProjectList = () => {
+const ProjectListScreen = ({navigation}) => {
   const [inputText, setInputText] = useState('');
   const [items, setItems] = useState([
-    {id: uuid.v4(), title: 'new Project'},
+    {id: uuid.v4(), title: 'new Project 001'},
     {id: uuid.v4(), title: 'new Project 002'},
     {id: uuid.v4(), title: 'new Project 003'},
     {id: uuid.v4(), title: 'new Project 004'},
@@ -44,7 +44,11 @@ const ProjectList = () => {
       <FlatList
         data={items}
         renderItem={({item}) => (
-          <ListItem item={item} deleteItem={deleteItem} />
+          <ProjectItem
+            item={item}
+            deleteItem={deleteItem}
+            navigation={navigation}
+          />
         )}
       />
       <Button title="Go to Details" onPress={signOut} />
@@ -58,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProjectList;
+export default ProjectListScreen;

@@ -1,9 +1,10 @@
 import React from 'react';
 // import {View, Text, Button} from 'react-native';
 import HomeScreen from './src/screens/HomeScreen';
-import ProjectList from './src/screens/ProjectList';
+import ProjectListScreen from './src/screens/ProjectListScreen';
 // import DetailsScreen from './src/screens/DetailsScreen';
-// import TaskScreen from './src/screens/TaskScreen';
+import TaskScreen from './src/screens/TaskScreen';
+import ProjectScreen from './src/screens/ProjectScreen';
 import SignInScreen from './src/screens/SignInScreen';
 import SplashScreen from './src/screens/SplashScreen';
 import {NavigationContainer} from '@react-navigation/native';
@@ -103,11 +104,28 @@ const App = () => {
                 title: 'Sign in',
                 // When logging out, a pop animation feels intuitive
                 animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+                headerShown: false,
               }}
             />
           ) : (
             // User is signed in
-            <Stack.Screen name="Project List" component={ProjectList} />
+            <>
+              <Stack.Screen
+                name="Project List"
+                component={ProjectListScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Project"
+                component={ProjectScreen}
+                options={{headerShown: false}}
+              />
+              <Stack.Screen
+                name="Task"
+                component={TaskScreen}
+                options={{headerShown: false}}
+              />
+            </>
           )}
         </Stack.Navigator>
       </NavigationContainer>

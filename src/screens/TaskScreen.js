@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
@@ -6,15 +6,28 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 import Header from '../containers/Header';
 import DateSelection from '../components/DateSelection';
 import TimeSelection from '../components/TimeSelection';
 import DrawLine from '../components/DrawLine';
 import uuid from 'react-native-uuid';
+import ButtonHexagon from '../components/ButtonHexagon';
 
 const screen = Dimensions.get('window');
+const formatNumber = number => `0${number}`.slice(-2);
+
+const getRemaining = time => {
+  const hours = Math.floor(time / 60 / 60);
+  const mins = Math.floor(time / 60);
+  const secs = time - mins * 60;
+  return {
+    hours: formatNumber(hours),
+    mins: formatNumber(mins),
+    secs: formatNumber(secs),
+  };
+};
 
 const TaskScreen = item => {
   const [startDate, setStartDate] = useState(new Date());
@@ -34,8 +47,25 @@ const TaskScreen = item => {
     {id: uuid.v4(), title: 'Some Task Work Hour 009'},
     {id: uuid.v4(), title: 'Some Task Work Hour 010'},
   ]);
+  const [remainingSecs, setRemainingSecs] = useState(0);
+  const [isActive, setIsActive] = useState(false);
+  const {hours, mins, secs} = getRemaining(remainingSecs);
 
-  const startCounting = () => {};
+  const toggle = () => {
+    setIsActive(!isActive);
+  };
+
+  useEffect(() => {
+    let interval = null;
+    if (isActive) {
+      interval = setInterval(() => {
+        setRemainingSecs(remainingSecs => remainingSecs + 1);
+      }, 1000);
+    } else if (!isActive && remainingSecs !== 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [isActive, remainingSecs]);
 
   return (
     <View style={styles.container}>
@@ -65,22 +95,24 @@ const TaskScreen = item => {
         placeholder="description..."
         style={{paddingHorizontal: 20}}
       />
-      <DrawLine />
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity style={[styles.buttonStyle, {backgroundColor: 'khaki'}]} onPress={() => startCounting()}>
-          <Text>Start</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.buttonStyle, {backgroundColor: 'lightcoral'}]}>
-          <Text>Stop</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.buttonStyle, {backgroundColor: 'lightgreen'}]}>
-          <Text>Done</Text>
+      <View style={styles.actionContainer}>
+        <Text style={styles.timerText}>{`${hours}:${mins}:${secs}`}</Text>
+        <TouchableOpacity>
+          <ButtonHexagon toggle={toggle} isActive={isActive} />
         </TouchableOpacity>
       </View>
-      <DrawLine />
       <FlatList
         data={items}
-        renderItem={({item}) => <Text style={{height: 60}}>{item.title}</Text>}
+        renderItem={({item}) => (
+          <Text
+            style={{
+              height: 60,
+              textAlignVertical: 'center',
+              paddingHorizontal: 20,
+            }}>
+            {item.title}
+          </Text>
+        )}
       />
     </View>
   );
@@ -95,19 +127,22 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingVertical: 5,
   },
-  buttonContainer: {
+  actionContainer: {
     flexDirection: 'row',
     backgroundColor: 'oldlace',
-    height: 40,
-    // justifyContent: 'space-between',
-    // borderColor: 'gainsboro',
-    // borderWidth: 1,
+    height: 43.99,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 30,
   },
   buttonStyle: {
     flex: 1,
     height: 40,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  timerText: {
+    fontSize: 30,
   },
 });
 

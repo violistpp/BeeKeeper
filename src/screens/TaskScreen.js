@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   FlatList,
+  ScrollView,
   StyleSheet,
   Dimensions,
+  Animated,
 } from 'react-native';
 import Header from '../containers/Header';
 import DateSelection from '../components/DateSelection';
@@ -50,10 +52,20 @@ const TaskScreen = item => {
   const [remainingSecs, setRemainingSecs] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const {hours, mins, secs} = getRemaining(remainingSecs);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  // const buttonLocale = useState(new Animated.ValueXY({x: 0, y: 0}));
 
   const toggle = () => {
     setIsActive(!isActive);
+    // moveButton();
   };
+  // const moveButton = () => {
+  //   Animated.timing(buttonLocale, {
+  //     toValue: {x: 100, y: 0},
+  //     duration: 1500,
+  //     useNativeDriver: true,
+  //   }).start();
+  // };
 
   useEffect(() => {
     let interval = null;
@@ -66,6 +78,15 @@ const TaskScreen = item => {
     }
     return () => clearInterval(interval);
   }, [isActive, remainingSecs]);
+  useEffect(() => {
+    if (isActive) {
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1500,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [fadeAnim, isActive]);
 
   return (
     <View style={styles.container}>
@@ -96,7 +117,9 @@ const TaskScreen = item => {
         style={{paddingHorizontal: 20}}
       />
       <View style={styles.actionContainer}>
-        <Text style={styles.timerText}>{`${hours}:${mins}:${secs}`}</Text>
+        <Animated.View style={{opacity: fadeAnim}}>
+          <Text style={styles.timerText}>{`${hours}:${mins}:${secs}`}</Text>
+        </Animated.View>
         <TouchableOpacity>
           <ButtonHexagon toggle={toggle} isActive={isActive} />
         </TouchableOpacity>
@@ -143,6 +166,13 @@ const styles = StyleSheet.create({
   },
   timerText: {
     fontSize: 30,
+  },
+  scrollView: {
+    backgroundColor: 'pink',
+    marginHorizontal: 20,
+  },
+  text: {
+    fontSize: 42,
   },
 });
 

@@ -53,19 +53,19 @@ const TaskScreen = item => {
   const [isActive, setIsActive] = useState(false);
   const {hours, mins, secs} = getRemaining(remainingSecs);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  // const buttonLocale = useState(new Animated.ValueXY({x: 0, y: 0}));
+  const buttonLocale = useState(new Animated.ValueXY({x: -270, y: 0}))[0];
 
   const toggle = () => {
     setIsActive(!isActive);
-    // moveButton();
+    moveButton();
   };
-  // const moveButton = () => {
-  //   Animated.timing(buttonLocale, {
-  //     toValue: {x: 100, y: 0},
-  //     duration: 1500,
-  //     useNativeDriver: true,
-  //   }).start();
-  // };
+  function moveButton() {
+    Animated.timing(buttonLocale, {
+      toValue: {x: isActive ? -270 : 0, y: 0},
+      duration: 700,
+      useNativeDriver: false,
+    }).start();
+  }
 
   useEffect(() => {
     let interval = null;
@@ -79,13 +79,11 @@ const TaskScreen = item => {
     return () => clearInterval(interval);
   }, [isActive, remainingSecs]);
   useEffect(() => {
-    if (isActive) {
-      Animated.timing(fadeAnim, {
-        toValue: 1,
-        duration: 1500,
-        useNativeDriver: true,
-      }).start();
-    }
+    Animated.timing(fadeAnim, {
+      toValue: isActive ? 1 : 0,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
   }, [fadeAnim, isActive]);
 
   return (
@@ -120,9 +118,9 @@ const TaskScreen = item => {
         <Animated.View style={{opacity: fadeAnim}}>
           <Text style={styles.timerText}>{`${hours}:${mins}:${secs}`}</Text>
         </Animated.View>
-        <TouchableOpacity>
+        <Animated.View style={buttonLocale.getLayout()}>
           <ButtonHexagon toggle={toggle} isActive={isActive} />
-        </TouchableOpacity>
+        </Animated.View>
       </View>
       <FlatList
         data={items}

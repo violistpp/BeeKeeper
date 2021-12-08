@@ -16,9 +16,7 @@ const TaskItem = ({item, navigation}) => {
 const styles = StyleSheet.create({
   listItem: {
     padding: 15,
-    backgroundColor: '#f8f8f8',
-    borderBottomWidth: 1,
-    borderColor: '#eee',
+    backgroundColor: 'snow',
   },
   listItemView: {
     flexDirection: 'row',

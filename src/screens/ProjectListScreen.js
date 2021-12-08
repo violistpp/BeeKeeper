@@ -1,5 +1,12 @@
 import React, {useState, useContext} from 'react';
-import {View, FlatList, StyleSheet, Alert, Button} from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Alert,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import Header from '../containers/Header';
 import ProjectItem from '../containers/ProjectItem';
 import AddItem from '../containers/AddItem';
@@ -10,10 +17,11 @@ const ProjectListScreen = ({navigation}) => {
   const [inputText, setInputText] = useState('');
   const [items, setItems] = useState([
     {id: uuid.v4(), title: 'new Project 001'},
-    {id: uuid.v4(), title: 'new Project 002'},
     {id: uuid.v4(), title: 'new Project 003'},
+    {id: uuid.v4(), title: 'new Project 002'},
     {id: uuid.v4(), title: 'new Project 004'},
   ]);
+  const [sortBy, setSortBy] = useState(['id', 'title']);
   const {signOut} = useContext(UserContext);
 
   const deleteItem = id => {
@@ -28,7 +36,9 @@ const ProjectListScreen = ({navigation}) => {
     } else {
       setInputText('');
       setItems(prevItems => {
-        return [{id: uuid.v4(), title}, ...prevItems];
+        return [{id: uuid.v4(), title}, ...prevItems].sort((a, b) => {
+          return a[sortBy[1]] > b[sortBy[1]];
+        });
       });
     }
   };
@@ -42,7 +52,9 @@ const ProjectListScreen = ({navigation}) => {
         setInputText={setInputText}
       />
       <FlatList
-        data={items}
+        data={items.sort((a, b) => {
+          return a[sortBy[1]] > b[sortBy[1]];
+        })}
         renderItem={({item}) => (
           <ProjectItem
             item={item}
@@ -51,7 +63,11 @@ const ProjectListScreen = ({navigation}) => {
           />
         )}
       />
-      <Button title="Go to Details" onPress={signOut} />
+      <TouchableOpacity onPress={signOut}>
+        <View style={styles.signOutButton}>
+          <Text style={styles.signOutText}>Go to Details</Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -59,6 +75,17 @@ const ProjectListScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: 'oldlace',
+  },
+  signOutButton: {
+    height: 50,
+    width: '100%',
+    backgroundColor: 'indianred',
+  },
+  signOutText: {
+    color: 'snow',
+    fontSize: 18,
+    textAlign: 'center',
   },
 });
 

@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
   },
   addBtn: {
     width: '15%',
-    backgroundColor: '#c2bad8',
+    backgroundColor: 'goldenrod',
     padding: 9,
     margin: 5,
   },
   btnText: {
-    color: 'darkslateblue',
+    color: 'snow',
     fontSize: 20,
     textAlign: 'center',
   },

@@ -31,13 +31,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    borderColor: 'gainsboro',
-    borderWidth: 1,
   },
   listItem: {
-    backgroundColor: 'aliceblue', //#f8f8f8
-    borderBottomWidth: 1,
-    borderColor: '#eee',
+    backgroundColor: 'snow', //floralwhite
   },
   listItemView: {
     padding: 15,

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "462583550013",
+    "project_id": "beekeeper-5e6b8",
+    "storage_bucket": "beekeeper-5e6b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462583550013:android:9231f98ee2a6854bdd1a54",
+        "android_client_info": {
+          "package_name": "com.beekeeper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462583550013-f9oaihmtp06db3di62tvi741nefa684o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.beekeeper",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "462583550013-13f7konjkcnkho986atg6f4d310n1381.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAnEYmRKGPnsYclG1ontvjavN6MZZTnnuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462583550013-13f7konjkcnkho986atg6f4d310n1381.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

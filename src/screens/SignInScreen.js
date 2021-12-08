@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   TouchableOpacity,
   StyleSheet,
 } from 'react-native';
@@ -25,6 +24,7 @@ const SignInScreen = () => {
           placeholder="Username"
           value={username}
           onChangeText={setUsername}
+          autoCapitalize="none"
         />
       </View>
       <View style={inputView}>
@@ -34,6 +34,7 @@ const SignInScreen = () => {
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          autoCapitalize="none"
         />
       </View>
       
@@ -56,7 +57,7 @@ export default SignInScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2FEDC',
+    backgroundColor: 'oldlace',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -86,6 +87,9 @@ const styles = StyleSheet.create({
     height: 50,
     justifyContent: 'center',
     marginTop: 40,
-    backgroundColor: '#E7E75A',
+    backgroundColor: 'goldenrod',
+  },
+  loginText: {
+    color: 'oldlace'
   },
 });

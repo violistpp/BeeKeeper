@@ -1,33 +1,61 @@
-import * as React from 'react';
+import React, {useState, useContext, useRef} from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
+  Animated,
+  Easing,
   StyleSheet,
 } from 'react-native';
 import {UserContext} from '../hooks/UserContext';
 
-const SignInScreen = () => {
-  const [username, setUsername] = React.useState('test@test.lt');
-  const [password, setPassword] = React.useState('testest');
-  const [repeatPassword, setRepeatPassword] = React.useState('');
-  const [isSignIn, setIsSignIn] = React.useState(true);
+const LoginScreen = () => {
+  // States
+  const [username, setUsername] = useState('test@test.lt');
+  const [password, setPassword] = useState('testest');
+  const [repeatPassword, setRepeatPassword] = useState('');
+  const [loginButtontext, setLoginButtontext] = useState('LOGIN');
+  const [isSignIn, setIsSignIn] = useState(true);
+  // Animated variable
+  const regLogTransliation = useRef(new Animated.Value(1)).current;
+  // Context
+  const {signIn, signUp} = useContext(UserContext);
 
-  const {signIn, signUp} = React.useContext(UserContext);
+  // Buttons movement
+  function moveBackButton() {
+    setTimeout(() => setLoginButtontext(isSignIn ? 'CREATE' : 'LOGIN'), 400);
+    Animated.timing(regLogTransliation, {
+      toValue: isSignIn ? 0 : 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+  }
 
   return (
     <View style={styles.container}>
+      {/* <Message message="Hello World" /> */}
       <View style={{justifyContent: 'center', paddingVertical: 50, height: 80}}>
-        {isSignIn ? (
-          <View />
-        ) : (
+        <Animated.View
+          style={{
+            transform: [
+              {
+                translateX: regLogTransliation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-150, -310],
+                }),
+              },
+            ],
+          }}>
           <TouchableOpacity
             style={[styles.buttonStyle, styles.backButton]}
-            onPress={() => setIsSignIn(true)}>
+            onPress={() => {
+              setIsSignIn(true);
+              moveBackButton();
+            }}>
             <Text style={styles.buttonText}>BACK TO LOGIN</Text>
           </TouchableOpacity>
-        )}
+        </Animated.View>
       </View>
       <Text style={styles.headerText}>
         {isSignIn ? 'LOGIN' : 'REGISTRATION'}
@@ -74,26 +102,55 @@ const SignInScreen = () => {
 
       <View style={styles.buttonContainer}>
         <View style={{flex: 1}}></View>
-        <View style={{flex: 3}}>
+        <Animated.View
+          style={{
+            flex: 3,
+            transform: [
+              {
+                translateX: regLogTransliation.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [-310, 0],
+                }),
+              },
+            ],
+          }}>
           <TouchableOpacity
             style={[styles.buttonStyle, styles.registrateButtom]}
-            onPress={() => setIsSignIn(false)}>
+            onPress={() => {
+              setIsSignIn(false);
+              moveBackButton();
+            }}>
             <Text style={styles.buttonText}>REGISTRATE</Text>
           </TouchableOpacity>
-        </View>
-        <View style={{flex: 2}}>
+        </Animated.View>
+        <Animated.View
+          style={{
+            flex: 2,
+            transform: [
+              {
+                translateX: regLogTransliation.interpolate({
+                  inputRange: [0, 0.5, 1],
+                  outputRange: [0, 200, 0],
+                }),
+              },
+            ],
+          }}>
           <TouchableOpacity
             style={[styles.buttonStyle, styles.loginButton]}
-            onPress={() => signIn({username, password})}>
-            <Text style={styles.buttonText}>LOGIN</Text>
+            onPress={() =>
+              isSignIn
+                ? signIn({username, password})
+                : signUp({username, password})
+            }>
+            <Text style={styles.buttonText}>{loginButtontext}</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       </View>
     </View>
   );
 };
 
-export default SignInScreen;
+export default LoginScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -144,9 +201,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     backgroundColor: 'darkgrey', // darkseagreen, lightblue
-    marginLeft: -160,
     paddingLeft: 60,
-    marginRight: 120,
   },
   buttonStyle: {
     paddingHorizontal: 30,

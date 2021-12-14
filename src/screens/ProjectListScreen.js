@@ -12,6 +12,11 @@ import ProjectItem from '../containers/ProjectItem';
 import AddItem from '../containers/AddItem';
 import uuid from 'react-native-uuid';
 import {UserContext} from '../hooks/UserContext';
+// import * as SecureStore from 'expo-secure-store';
+
+// async function getValueFor(key) {
+//   return await SecureStore.getItemAsync(key);
+// }
 
 const ProjectListScreen = ({navigation}) => {
   const [inputText, setInputText] = useState('');
@@ -63,6 +68,7 @@ const ProjectListScreen = ({navigation}) => {
           />
         )}
       />
+      {/* <Text>{JSON.stringify(getValueFor('userToken'))}</Text> */}
       <TouchableOpacity onPress={signOut}>
         <View style={styles.signOutButton}>
           <Text style={styles.signOutText}>Go to Details</Text>

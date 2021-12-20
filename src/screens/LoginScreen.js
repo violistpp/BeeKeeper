@@ -5,10 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
   Animated,
-  Easing,
   StyleSheet,
 } from 'react-native';
 import {UserContext} from '../hooks/UserContext';
+import {Notifier, Easing, NotifierComponents} from 'react-native-notifier';
 
 const LoginScreen = () => {
   // States
@@ -31,6 +31,21 @@ const LoginScreen = () => {
       useNativeDriver: true,
     }).start();
   }
+
+  // Notification
+  const showNotification = () => {
+    Notifier.showNotification({
+      title: 'John Doe',
+      description: 'Hello! Can you help me with notifications?',
+      duration: 10000,
+      showAnimationDuration: 800,
+      showEasing: Easing.bounce,
+      Component: NotifierComponents.Alert,
+      componentProps: {
+        alertType: 'warn',
+      },
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -119,6 +134,7 @@ const LoginScreen = () => {
             onPress={() => {
               setIsSignIn(false);
               moveBackButton();
+              showNotification();
             }}>
             <Text style={styles.buttonText}>REGISTRATE</Text>
           </TouchableOpacity>

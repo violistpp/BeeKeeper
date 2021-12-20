@@ -59,38 +59,40 @@ const Message = props => {
   );
 };
 
-export default () => {
-  const [messages, setMessages] = useState([]);
+export default Message;
 
-  return (
-    <>
-      <View
-        style={{
-          position: 'absolute',
-          top: 45,
-          left: 0,
-          right: 0,
-        }}>
-        {messages.map(message => (
-          <Message
-            key={message}
-            message={message}
-            onHide={() => {
-              setMessages(messages =>
-                messages.filter(currentMessage => currentMessage !== message),
-              );
-            }}
-          />
-        ))}
-      </View>
+// export default () => {
+//   const [messages, setMessages] = useState([]);
 
-      <Button
-        title="Add message"
-        onPress={() => {
-          const message = getRandomMessage();
-          setMessages([...messages, message]);
-        }}
-      />
-    </>
-  );
-};
+//   return (
+//     <>
+//       <View
+//         style={{
+//           position: 'absolute',
+//           top: 45,
+//           left: 0,
+//           right: 0,
+//         }}>
+//         {messages.map(message => (
+//           <Message
+//             key={message}
+//             message={message}
+//             onHide={() => {
+//               setMessages(messages =>
+//                 messages.filter(currentMessage => currentMessage !== message),
+//               );
+//             }}
+//           />
+//         ))}
+//       </View>
+
+//       <Button
+//         title="Add message"
+//         onPress={() => {
+//           const message = getRandomMessage();
+//           setMessages([...messages, message]);
+//         }}
+//       />
+//     </>
+//   );
+// };

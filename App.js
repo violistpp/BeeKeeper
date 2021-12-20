@@ -11,6 +11,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {UserContext} from './src/hooks/UserContext';
 import auth from '@react-native-firebase/auth';
+import {NotifierWrapper} from 'react-native-notifier';
 // import * as SecureStore from 'expo-secure-store';
 // import Message from './src/components/Message';
 
@@ -46,12 +47,18 @@ const App = () => {
             ...prevState,
             isSignout: false,
             userToken: action.token,
+            isLoading: false,
           };
         case 'SIGN_OUT':
           return {
             ...prevState,
             isSignout: true,
             userToken: null,
+          };
+        case 'LOADING':
+          return {
+            ...prevState,
+            isLoading: true,
           };
       }
     },
@@ -85,6 +92,7 @@ const App = () => {
   const authContext = useMemo(
     () => ({
       signIn: async data => {
+        dispatch({type: 'LOADING'});
         // In a production app, we need to send some data (usually username, password) to server and get a token
         // We will also need to handle errors if sign in failed
         // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
@@ -117,7 +125,6 @@ const App = () => {
           });
       },
       signOut: () => {
-
         dispatch({type: 'SIGN_OUT'});
       },
       signUp: async data => {
@@ -147,43 +154,49 @@ const App = () => {
   return (
     <UserContext.Provider value={authContext}>
       <NavigationContainer>
-        <Stack.Navigator>
-          {state.isLoading ? (
-            // We haven't finished checking for the token yet
-            <Stack.Screen name="Splash" component={SplashScreen} />
-          ) : state.userToken == null ? (
-            // No token found, user isn't signed in
-            <Stack.Screen
-              name="SignIn"
-              component={LoginScreen}
-              options={{
-                title: 'Sign in',
-                // When logging out, a pop animation feels intuitive
-                animationTypeForReplace: state.isSignout ? 'pop' : 'push',
-                headerShown: false,
-              }}
-            />
-          ) : (
-            // User is signed in
-            <>
+        <NotifierWrapper>
+          <Stack.Navigator>
+            {state.isLoading ? (
+              // We haven't finished checking for the token yet
               <Stack.Screen
-                name="Project List"
-                component={ProjectListScreen}
+                name="Splash"
+                component={SplashScreen}
                 options={{headerShown: false}}
               />
+            ) : state.userToken == null ? (
+              // No token found, user isn't signed in
               <Stack.Screen
-                name="Project"
-                component={ProjectScreen}
-                options={{headerShown: false}}
+                name="SignIn"
+                component={LoginScreen}
+                options={{
+                  title: 'Sign in',
+                  // When logging out, a pop animation feels intuitive
+                  animationTypeForReplace: state.isSignout ? 'pop' : 'push',
+                  headerShown: false,
+                }}
               />
-              <Stack.Screen
-                name="Task"
-                component={TaskScreen}
-                options={{headerShown: false}}
-              />
-            </>
-          )}
-        </Stack.Navigator>
+            ) : (
+              // User is signed in
+              <>
+                <Stack.Screen
+                  name="Project List"
+                  component={ProjectListScreen}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="Project"
+                  component={ProjectScreen}
+                  options={{headerShown: false}}
+                />
+                <Stack.Screen
+                  name="Task"
+                  component={TaskScreen}
+                  options={{headerShown: false}}
+                />
+              </>
+            )}
+          </Stack.Navigator>
+        </NotifierWrapper>
       </NavigationContainer>
     </UserContext.Provider>
   );

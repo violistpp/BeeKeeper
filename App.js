@@ -16,19 +16,7 @@ import {NotifierWrapper} from 'react-native-notifier';
 // import Message from './src/components/Message';
 
 const Stack = createNativeStackNavigator();
-
-// async function save(key, value) {
-//   await SecureStore.setItemAsync(key, value);
-// }
-
-// async function getValueFor(key) {
-//   let result = await SecureStore.getItemAsync(key);
-//   if (result) {
-//     alert("🔐 Here's your value 🔐 \n" + result);
-//   } else {
-//     alert('No values stored under that key' + key + '.');
-//   }
-// }
+// var SharedPreferences = require('react-native-shared-preferences');
 
 const App = () => {
   const [key, onChangeKey] = useState('userToken');

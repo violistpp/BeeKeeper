@@ -63,7 +63,6 @@ const TaskScreen = item => {
     setIsActive(!isActive);
     moveButton();
     if (isActive) {
-      console.log('make work hour now');
       // addWorkHour(
       //   {title: 'new work hour item', id: uuid.v4()},
       //   onWorkHouradded,
@@ -87,7 +86,6 @@ const TaskScreen = item => {
         ];
       });
       setRemainingSecs(0);
-      console.log('done');
     }
   };
 
@@ -124,7 +122,6 @@ const TaskScreen = item => {
   // }, []);
 
   // const onTaskReceived = taskList => {
-  //   console.log(taskList);
   //   setItems(prevState => ({
   //     taskList: (prevState.taskList = taskList),
   //   }));

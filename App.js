@@ -117,7 +117,7 @@ const App = () => {
         dispatch({type: 'LOADING'});
         auth()
           .signInWithEmailAndPassword(data.username, data.password)
-          .then((userCredential) => {
+          .then(() => {
             auth()
               .currentUser.getIdToken(true)
               .then(function (idToken) {

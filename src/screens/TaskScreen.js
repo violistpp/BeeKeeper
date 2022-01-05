@@ -166,7 +166,7 @@ const TaskScreen = item => {
         visible={isModalVisible}
         onRequestClose={() => setIsModalVisible(false)}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Change Text: </Text>
+          <Text style={styles.modalText}>Change Title: </Text>
           <TextInput
             style={styles.modalTextInput}
             onChangeText={text => setModalInputText(text)}
@@ -176,12 +176,12 @@ const TaskScreen = item => {
           />
           <TouchableOpacity
             onPress={() => onPressSaveEdit()}
-            style={styles.touchableSave}>
+            style={[styles.buttonStyle, {backgroundColor: 'goldenrod'}]}>
             <Text style={styles.text}>Save</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => onPressCancleEdit()}
-            style={styles.touchableSave}>
+            style={[styles.buttonStyle, {backgroundColor: 'darkgrey'}]}>
             <Text style={styles.text}>Cancle</Text>
           </TouchableOpacity>
         </View>
@@ -206,12 +206,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 30,
+    marginBottom: 20,
   },
   buttonStyle: {
-    flex: 1,
-    height: 40,
-    alignItems: 'center',
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    height: 50,
     justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
   },
   timerText: {
     fontSize: 30,
@@ -220,8 +223,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'pink',
     marginHorizontal: 20,
   },
-  text: {
-    fontSize: 42,
+  modalText: {
+    fontSize: 20,
   },
   modalTextInput: {
     width: '90%',
@@ -229,6 +232,7 @@ const styles = StyleSheet.create({
     borderColor: 'goldenrod',
     borderWidth: 1,
     fontSize: 25,
+    marginTop: 10,
   },
   modalView: {
     flex: 1,

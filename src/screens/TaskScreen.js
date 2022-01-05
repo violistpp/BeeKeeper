@@ -38,16 +38,10 @@ const TaskScreen = item => {
   const [endTime, setEndTime] = useState(new Date());
   const [description, setDescription] = useState('');
   const [items, setItems] = useState([
-    {id: uuid.v4(), title: 'Some Task Work Hour 001'},
-    {id: uuid.v4(), title: 'Some Task Work Hour 002'},
-    {id: uuid.v4(), title: 'Some Task Work Hour 003'},
-    {id: uuid.v4(), title: 'Some Task Work Hour 004'},
-    {id: uuid.v4(), title: 'Some Task Work Hour 005'},
-    {id: uuid.v4(), title: 'Some Task Work Hour 006'},
-    {id: uuid.v4(), title: 'Some Task Work Hour 007'},
-    {id: uuid.v4(), title: 'Some Task Work Hour 008'},
-    {id: uuid.v4(), title: 'Some Task Work Hour 009'},
-    {id: uuid.v4(), title: 'Some Task Work Hour 010'},
+    {id: uuid.v4(), title: 'Sumokėjau už medieną'},
+    {id: uuid.v4(), title: 'Atvežiau medienos gabalus'},
+    {id: uuid.v4(), title: 'Supjausčiau medį į dalis'},
+    {id: uuid.v4(), title: 'Paruošiau įrankius darbui'},
   ]);
   const [remainingSecs, setRemainingSecs] = useState(0);
   const [isActive, setIsActive] = useState(false);
@@ -88,7 +82,7 @@ const TaskScreen = item => {
 
   return (
     <View style={styles.container}>
-      <Header title="Task" />
+      <Header />
       <Text style={styles.littleHeader}>Term of delivery</Text>
       <DateSelection
         startDate={startDate}

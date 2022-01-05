@@ -134,7 +134,6 @@ const LoginScreen = () => {
             onPress={() => {
               setIsSignIn(false);
               moveBackButton();
-              showNotification();
             }}>
             <Text style={styles.buttonText}>REGISTRATE</Text>
           </TouchableOpacity>

@@ -21,10 +21,10 @@ import {UserContext} from '../hooks/UserContext';
 const ProjectListScreen = ({navigation}) => {
   const [inputText, setInputText] = useState('');
   const [items, setItems] = useState([
-    {id: uuid.v4(), title: 'new Project 001'},
-    {id: uuid.v4(), title: 'new Project 003'},
-    {id: uuid.v4(), title: 'new Project 002'},
-    {id: uuid.v4(), title: 'new Project 004'},
+    {id: uuid.v4(), title: 'Medaus sukimas'},
+    {id: uuid.v4(), title: 'Rėmelių gamyba'}, //-----
+    {id: uuid.v4(), title: 'Stogų gamyba'},
+    {id: uuid.v4(), title: 'Bičių gydymas'},
   ]);
   const [sortBy, setSortBy] = useState(['id', 'title']);
   const {signOut} = useContext(UserContext);

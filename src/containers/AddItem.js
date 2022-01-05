@@ -38,10 +38,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   addBtn: {
-    width: '15%',
+    width: '20%',
+    marginLeft: 1,
+    paddingLeft: -5,
     backgroundColor: 'goldenrod',
     padding: 9,
     margin: 5,
+    borderRadius: 30,
   },
   btnText: {
     color: 'snow',

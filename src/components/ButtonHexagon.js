@@ -6,7 +6,7 @@ const ButtonHexagon = ({toggle, isActive}) => {
     <TouchableOpacity onPress={() => toggle()}>
       <View style={styles.hexagon}>
         <View style={styles.hexagonInner}>
-          <Text style={styles.timerText}>{isActive ? 'Stop' : 'Start'}</Text>
+          <Text style={styles.buttonName}>{isActive ? 'Stop' : 'Start'}</Text>
         </View>
         <View style={styles.hexagonBefore} />
         <View style={styles.hexagonAfter} />
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 20,
     borderTopColor: 'goldenrod',
   },
-  timerText: {
+  buttonName: {
     position: 'absolute',
     color: 'white',
     fontSize: 30,

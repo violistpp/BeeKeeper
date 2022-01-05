@@ -18,16 +18,10 @@ const ProjectScreen = item => {
   const [endDate, setEndDate] = useState(new Date());
   const [description, setDescription] = useState('');
   const [items, setItems] = useState([
-    {id: uuid.v4(), title: 'Some Task 001'},
-    {id: uuid.v4(), title: 'Some Task 002'},
-    {id: uuid.v4(), title: 'Some Task 003'},
-    {id: uuid.v4(), title: 'Some Task 004'},
-    {id: uuid.v4(), title: 'Some Task 005'},
-    {id: uuid.v4(), title: 'Some Task 006'},
-    {id: uuid.v4(), title: 'Some Task 007'},
-    {id: uuid.v4(), title: 'Some Task 008'},
-    {id: uuid.v4(), title: 'Some Task 009'},
-    {id: uuid.v4(), title: 'Some Task 010'},
+    {id: uuid.v4(), title: 'Suremontuoti rėmelį'},
+    {id: uuid.v4(), title: 'Rėmelių detalių surinkimas'},
+    {id: uuid.v4(), title: 'Medienos paruošimas'},
+    {id: uuid.v4(), title: 'Rėmelių komplektavimas'},
   ]);
   const navigation = item.navigation;
 

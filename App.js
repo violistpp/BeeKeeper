@@ -1,8 +1,5 @@
-import React, {useState, useMemo, useEffect, useReducer} from 'react';
-// import {View, Text, Button} from 'react-native';
-import HomeScreen from './src/screens/HomeScreen';
+import React, {useMemo, useEffect, useReducer} from 'react';
 import ProjectListScreen from './src/screens/ProjectListScreen';
-// import DetailsScreen from './src/screens/DetailsScreen';
 import TaskScreen from './src/screens/TaskScreen';
 import ProjectScreen from './src/screens/ProjectScreen';
 import LoginScreen from './src/screens/LoginScreen';
@@ -11,16 +8,52 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {UserContext} from './src/hooks/UserContext';
 import auth from '@react-native-firebase/auth';
-import {NotifierWrapper} from 'react-native-notifier';
-// import * as SecureStore from 'expo-secure-store';
+import {
+  NotifierWrapper,
+  Notifier,
+  Easing,
+  NotifierComponents,
+} from 'react-native-notifier';
+import * as Keychain from 'react-native-keychain';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Message from './src/components/Message';
 
 const Stack = createNativeStackNavigator();
-// var SharedPreferences = require('react-native-shared-preferences');
 
 const App = () => {
-  const [key, onChangeKey] = useState('userToken');
-  const [value, onChangeValue] = useState('');
+  const showNotification = item => {
+    Notifier.showNotification({
+      title: item.title,
+      description: item.text,
+      duration: 10000,
+      showAnimationDuration: 800,
+      showEasing: Easing.bounce,
+      Component: NotifierComponents.Alert,
+      componentProps: {
+        alertType: 'warn',
+      },
+    });
+  };
+
+  const storeData = async value => {
+    try {
+      await AsyncStorage.setItem('userIdToken', value);
+    } catch (e) {
+      // saving error
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('userIdToken');
+      if (value !== null) {
+        // value previously stored
+      }
+    } catch (e) {
+      // error reading value
+    }
+  };
+
   const [state, dispatch] = useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -42,6 +75,7 @@ const App = () => {
             ...prevState,
             isSignout: true,
             userToken: null,
+            isLoading: false,
           };
         case 'LOADING':
           return {
@@ -64,6 +98,9 @@ const App = () => {
       try {
         // Restore token stored in `SecureStore` or any other encrypted storage
         // userToken = await SecureStore.getItemAsync('userToken');
+        if (getData('userIdToken')) {
+          userToken = getData('userIdToken');
+        }
       } catch (e) {
         // Restoring token failed
       }
@@ -72,7 +109,10 @@ const App = () => {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({type: 'RESTORE_TOKEN', token: userToken});
+      dispatch({
+        type: 'RESTORE_TOKEN',
+        token: userToken,
+      });
     };
 
     bootstrapAsync();
@@ -91,35 +131,55 @@ const App = () => {
             auth()
               .currentUser.getIdToken(true)
               .then(function (idToken) {
-                // save('userToken', idToken);
-                console.log(idToken);
+                storeData(idToken);
                 dispatch({
                   type: 'SIGN_IN',
                   token: idToken,
                 });
               })
               .catch(function (error) {
-                // Handle error
+                console.log(error);
+                showNotification({
+                  title: 'error',
+                  text: error.description,
+                  type: 'error',
+                });
+                dispatch({type: 'SIGN_OUT'});
               });
           })
           .catch(error => {
             if (error.code === 'auth/email-already-in-use') {
-              console.log('That email address is already in use!');
+              showNotification({
+                title: 'Warning',
+                text: 'That email address is already in use!',
+                type: 'warm',
+              });
+              dispatch({type: 'SIGN_OUT'});
             }
             if (error.code === 'auth/invalid-email') {
-              console.log('That email address is invalid!');
+              showNotification({
+                title: 'Warning',
+                text: 'That email address is invalid!',
+                type: 'warm',
+              });
+              dispatch({type: 'SIGN_OUT'});
             }
-            console.error(error);
+            showNotification({
+              title: 'error',
+              text: error.description,
+              type: 'error',
+            });
+            dispatch({type: 'SIGN_OUT'});
           });
       },
       signOut: () => {
+        storeData(null);
         dispatch({type: 'SIGN_OUT'});
       },
       signUp: async data => {
         auth()
           .createUserWithEmailAndPassword(data.username, data.password)
           .then(userCredential => {
-            console.log(userCredential.user.getIdToken());
             dispatch({
               type: 'SIGN_IN',
               token: userCredential.user.getIdToken(),
@@ -127,12 +187,27 @@ const App = () => {
           })
           .catch(error => {
             if (error.code === 'auth/email-already-in-use') {
-              console.log('That email address is already in use!');
+              showNotification({
+                title: 'Warning',
+                text: 'That email address is already in use!',
+                type: 'warm',
+              });
+              dispatch({type: 'SIGN_OUT'});
             }
             if (error.code === 'auth/invalid-email') {
-              console.log('That email address is invalid!');
+              showNotification({
+                title: 'Warning',
+                text: 'That email address is invalid!',
+                type: 'warm',
+              });
+              dispatch({type: 'SIGN_OUT'});
             }
-            console.error(error);
+            showNotification({
+              title: 'error',
+              text: error.description,
+              type: 'error',
+            });
+            dispatch({type: 'SIGN_OUT'});
           });
       },
     }),
@@ -145,26 +220,22 @@ const App = () => {
         <NotifierWrapper>
           <Stack.Navigator>
             {state.isLoading ? (
-              // We haven't finished checking for the token yet
               <Stack.Screen
                 name="Splash"
                 component={SplashScreen}
                 options={{headerShown: false}}
               />
             ) : state.userToken == null ? (
-              // No token found, user isn't signed in
               <Stack.Screen
                 name="SignIn"
                 component={LoginScreen}
                 options={{
                   title: 'Sign in',
-                  // When logging out, a pop animation feels intuitive
                   animationTypeForReplace: state.isSignout ? 'pop' : 'push',
                   headerShown: false,
                 }}
               />
             ) : (
-              // User is signed in
               <>
                 <Stack.Screen
                   name="Project List"

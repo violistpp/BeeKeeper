@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Dimensions,
   Animated,
+  Modal,
 } from 'react-native';
 import Header from '../containers/Header';
 import DateSelection from '../components/DateSelection';
@@ -16,6 +17,14 @@ import TimeSelection from '../components/TimeSelection';
 import DrawLine from '../components/DrawLine';
 import uuid from 'react-native-uuid';
 import ButtonHexagon from '../components/ButtonHexagon';
+import WorkHourItem from '../containers/WorkHourItem';
+
+const DATA = [
+  {id: uuid.v4(), title: 'Sumokėjau už medieną'},
+  {id: uuid.v4(), title: 'Atvežiau medienos gabalus'},
+  {id: uuid.v4(), title: 'Supjausčiau medį į dalis'},
+  {id: uuid.v4(), title: 'Paruošiau įrankius darbui'},
+];
 
 const screen = Dimensions.get('window');
 const formatNumber = number => `0${number}`.slice(-2);
@@ -37,12 +46,11 @@ const TaskScreen = item => {
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [description, setDescription] = useState('');
-  const [items, setItems] = useState([
-    {id: uuid.v4(), title: 'Sumokėjau už medieną'},
-    {id: uuid.v4(), title: 'Atvežiau medienos gabalus'},
-    {id: uuid.v4(), title: 'Supjausčiau medį į dalis'},
-    {id: uuid.v4(), title: 'Paruošiau įrankius darbui'},
-  ]);
+  const [items, setItems] = useState(DATA);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalInputText, setModalInputText] = useState('');
+  const [editItem, setEditItem] = useState();
+  const [isRender, setIsRender] = useState(false);
   const [remainingSecs, setRemainingSecs] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const {hours, mins, secs} = getRemaining(remainingSecs);
@@ -53,6 +61,7 @@ const TaskScreen = item => {
     setIsActive(!isActive);
     moveButton();
   };
+
   function moveButton() {
     Animated.timing(buttonLocale, {
       toValue: {x: isActive ? -270 : 0, y: 0},
@@ -72,6 +81,7 @@ const TaskScreen = item => {
     }
     return () => clearInterval(interval);
   }, [isActive, remainingSecs]);
+
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: isActive ? 1 : 0,
@@ -79,6 +89,33 @@ const TaskScreen = item => {
       useNativeDriver: true,
     }).start();
   }, [fadeAnim, isActive]);
+
+  const editItemFn = item => {
+    setIsModalVisible(true);
+    setModalInputText(item.title);
+    setEditItem(item.id);
+  };
+
+  const handleEditItem = editItem => {
+    const newData = items.map(item => {
+      if (item.id == editItem) {
+        item.title = modalInputText;
+        return item;
+      }
+      return item;
+    });
+    setItems(newData);
+    setIsRender(!isRender);
+  };
+
+  const onPressSaveEdit = () => {
+    handleEditItem(editItem);
+    setIsModalVisible(false);
+  };
+
+  const onPressCancleEdit = () => {
+    setIsModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -118,17 +155,37 @@ const TaskScreen = item => {
       </View>
       <FlatList
         data={items}
-        renderItem={({item}) => (
-          <Text
-            style={{
-              height: 60,
-              textAlignVertical: 'center',
-              paddingHorizontal: 20,
-            }}>
-            {item.title}
-          </Text>
+        keyExtractor={item => item.id.toString()}
+        renderItem={({item, index}) => (
+          <WorkHourItem item={item} editItem={editItemFn} />
         )}
+        extraData={isRender}
       />
+      <Modal
+        animationType="fade"
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>Change Text: </Text>
+          <TextInput
+            style={styles.modalTextInput}
+            onChangeText={text => setModalInputText(text)}
+            defaultValue={modalInputText}
+            editable={true}
+            maxLength={200}
+          />
+          <TouchableOpacity
+            onPress={() => onPressSaveEdit()}
+            style={styles.touchableSave}>
+            <Text style={styles.text}>Save</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => onPressCancleEdit()}
+            style={styles.touchableSave}>
+            <Text style={styles.text}>Cancle</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -165,6 +222,24 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 42,
+  },
+  modalTextInput: {
+    width: '90%',
+    height: 70,
+    borderColor: 'goldenrod',
+    borderWidth: 1,
+    fontSize: 25,
+  },
+  modalView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  touchableSave: {
+    backgroundColor: 'goldenrod',
+    paddingHorizontal: 100,
+    alignItems: 'center',
+    marginTop: 20,
   },
 });
 

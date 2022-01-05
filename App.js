@@ -16,7 +16,7 @@ import {
 } from 'react-native-notifier';
 import * as Keychain from 'react-native-keychain';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import Message from './src/components/Message';
+// import showNotification from './src/utils/ShowNotification';
 
 const Stack = createNativeStackNavigator();
 
@@ -91,7 +91,6 @@ const App = () => {
     },
   );
   useEffect(() => {
-    // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       let userToken;
 
@@ -104,11 +103,6 @@ const App = () => {
       } catch (e) {
         // Restoring token failed
       }
-
-      // After restoring token, we may need to validate it in production apps
-
-      // This will switch to the App screen or Auth screen and this loading
-      // screen will be unmounted and thrown away.
       dispatch({
         type: 'RESTORE_TOKEN',
         token: userToken,
@@ -121,13 +115,9 @@ const App = () => {
     () => ({
       signIn: async data => {
         dispatch({type: 'LOADING'});
-        // In a production app, we need to send some data (usually username, password) to server and get a token
-        // We will also need to handle errors if sign in failed
-        // After getting token, we need to persist the token using `SecureStore` or any other encrypted storage
-        // In the example, we'll use a dummy token
         auth()
           .signInWithEmailAndPassword(data.username, data.password)
-          .then(userCredential => {
+          .then((userCredential) => {
             auth()
               .currentUser.getIdToken(true)
               .then(function (idToken) {
@@ -138,36 +128,27 @@ const App = () => {
                 });
               })
               .catch(function (error) {
-                console.log(error);
                 showNotification({
                   title: 'error',
-                  text: error.description,
+                  text: 'Some error',
                   type: 'error',
                 });
                 dispatch({type: 'SIGN_OUT'});
               });
           })
           .catch(error => {
-            if (error.code === 'auth/email-already-in-use') {
-              showNotification({
-                title: 'Warning',
-                text: 'That email address is already in use!',
-                type: 'warm',
-              });
-              dispatch({type: 'SIGN_OUT'});
-            }
             if (error.code === 'auth/invalid-email') {
               showNotification({
-                title: 'Warning',
-                text: 'That email address is invalid!',
+                title: 'Blogi prisijungimo duomenys',
+                text: 'Prisijungimo el.paštas neteisingai įvestas',
                 type: 'warm',
               });
               dispatch({type: 'SIGN_OUT'});
             }
             showNotification({
-              title: 'error',
-              text: error.description,
-              type: 'error',
+              title: 'Blogi prisijungimo duomenys',
+              text: 'Patikrintike, ar visį duomenys yra teisingai įvestos',
+              type: 'warm',
             });
             dispatch({type: 'SIGN_OUT'});
           });
@@ -188,23 +169,23 @@ const App = () => {
           .catch(error => {
             if (error.code === 'auth/email-already-in-use') {
               showNotification({
-                title: 'Warning',
-                text: 'That email address is already in use!',
+                title: 'Blogi prisijungimo duomenys',
+                text: 'Prisijungimo el.paštas yra jau užimtas. Įveskite kitą el.paštą ir bandykite darb karta',
                 type: 'warm',
               });
               dispatch({type: 'SIGN_OUT'});
             }
             if (error.code === 'auth/invalid-email') {
               showNotification({
-                title: 'Warning',
-                text: 'That email address is invalid!',
+                title: 'Blogi prisijungimo duomenys',
+                text: 'Prisijungimo el.paštas yra neteisingas.',
                 type: 'warm',
               });
               dispatch({type: 'SIGN_OUT'});
             }
             showNotification({
               title: 'error',
-              text: error.description,
+              text: '',
               type: 'error',
             });
             dispatch({type: 'SIGN_OUT'});

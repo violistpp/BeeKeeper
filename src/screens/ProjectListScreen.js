@@ -71,7 +71,7 @@ const ProjectListScreen = ({navigation}) => {
       {/* <Text>{JSON.stringify(getValueFor('userToken'))}</Text> */}
       <TouchableOpacity onPress={signOut}>
         <View style={styles.signOutButton}>
-          <Text style={styles.signOutText}>Go to Details</Text>
+          <Text style={styles.signOutText}>Sign out</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'oldlace',
   },
   signOutButton: {
-    height: 50,
+    height: 30,
     width: '100%',
     backgroundColor: 'indianred',
   },

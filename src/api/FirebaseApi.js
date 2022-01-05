@@ -1,29 +1,18 @@
-import firebase from 'react-native-firebase';
+import {db} from '../config';
 
-export function addWorkHour(whour, addComplete) {
-  firebase
-    .firestore()
-    .collection('tasks')
-    .add({
-      id: whour.id,
-      title: whour.title,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    })
-    .then(data => addComplete(data))
-    .catch(error => console.log(error));
+export function addWorkHour(whour) {
+  db.ref('/tasks').push({
+    id: whour.id,
+    title: whour.title,
+  });
 }
 
 export async function getWorkHour(tasksRetrieved) {
-  var taskList = [];
+  let taskList = [];
 
-  var snapshot = await firebase
-    .firestore()
-    .collection('tasks')
-    .orderBy('createdAt')
-    .get();
-
-  snapshot.forEach(doc => {
-    taskList.push(doc.data());
+  db.ref('/tasks').on('value', querySnapShot => {
+    let data = querySnapShot.val() ? querySnapShot.val() : {};
+    taskList = {...data};
   });
 
   tasksRetrieved(taskList);

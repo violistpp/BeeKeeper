@@ -18,12 +18,13 @@ import DrawLine from '../components/DrawLine';
 import uuid from 'react-native-uuid';
 import ButtonHexagon from '../components/ButtonHexagon';
 import WorkHourItem from '../containers/WorkHourItem';
+import {addWorkHour, getWorkHour} from '../api/FirebaseApi';
 
 const DATA = [
-  {id: uuid.v4(), title: 'Sumokėjau už medieną'},
-  {id: uuid.v4(), title: 'Atvežiau medienos gabalus'},
-  {id: uuid.v4(), title: 'Supjausčiau medį į dalis'},
-  {id: uuid.v4(), title: 'Paruošiau įrankius darbui'},
+  {id: uuid.v4(), title: 'Sumokėjau už medieną', interval: '00:04:01'},
+  {id: uuid.v4(), title: 'Atvežiau medienos gabalus', interval: '00:05:46'},
+  {id: uuid.v4(), title: 'Supjausčiau medį į dalis', interval: '02:15:15'},
+  {id: uuid.v4(), title: 'Paruošiau įrankius darbui', interval: '01:10:07'},
 ];
 
 const screen = Dimensions.get('window');
@@ -47,6 +48,7 @@ const TaskScreen = item => {
   const [endTime, setEndTime] = useState(new Date());
   const [description, setDescription] = useState('');
   const [items, setItems] = useState(DATA);
+  const [sortBy, setSortBy] = useState(['id', 'title']);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalInputText, setModalInputText] = useState('');
   const [editItem, setEditItem] = useState();
@@ -60,6 +62,33 @@ const TaskScreen = item => {
   const toggle = () => {
     setIsActive(!isActive);
     moveButton();
+    if (isActive) {
+      console.log('make work hour now');
+      // addWorkHour(
+      //   {title: 'new work hour item', id: uuid.v4()},
+      //   onWorkHouradded,
+      // );
+
+      // let taskList = [
+      //   {id: uuid.v4(), title: 'NEW WORK HOUR', interval: '10:07'},
+      // ];
+      // setItems(prevState => ({
+      //   taskList: (prevState.taskList = taskList),
+      // }));
+
+      setItems(prevItems => {
+        return [
+          {
+            id: uuid.v4(),
+            title: 'NEW WORK HOUR',
+            interval: `${hours}:${mins}:${secs}`,
+          },
+          ...prevItems,
+        ];
+      });
+      setRemainingSecs(0);
+      console.log('done');
+    }
   };
 
   function moveButton() {
@@ -89,6 +118,22 @@ const TaskScreen = item => {
       useNativeDriver: true,
     }).start();
   }, [fadeAnim, isActive]);
+
+  // useEffect(() => {
+  //   getWorkHour(onTaskReceived);
+  // }, []);
+
+  // const onTaskReceived = taskList => {
+  //   console.log(taskList);
+  //   setItems(prevState => ({
+  //     taskList: (prevState.taskList = taskList),
+  //   }));
+  // };
+
+  // const onWorkHouradded = workHour => {
+  //   console.log(workHour);
+  //   console.log('Work Hour added');
+  // };
 
   const editItemFn = item => {
     setIsModalVisible(true);

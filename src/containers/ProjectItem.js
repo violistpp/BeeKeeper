@@ -16,7 +16,14 @@ const ProjectItem = ({navigation, item, deleteItem}) => {
         </View>
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.listItem}
+        style={{
+          borderColor: 'goldenrod',
+          borderWidth: 2,
+          borderRadius: 15,
+          padding: 5,
+          paddingRight: 20,
+          marginRight: -30,
+        }}
         onPress={() => deleteItem(item.id)}>
         <View style={styles.listItemView}>
           <Text style={styles.listItemTitle}>Delete</Text>

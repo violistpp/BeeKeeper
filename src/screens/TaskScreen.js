@@ -12,6 +12,7 @@ import {
   Modal,
 } from 'react-native';
 import Header from '../containers/Header';
+import Scanner from '../components/Scanner';
 import DateSelection from '../components/DateSelection';
 import TimeSelection from '../components/TimeSelection';
 import DrawLine from '../components/DrawLine';
@@ -22,6 +23,8 @@ import {addWorkHour, getWorkHour} from '../api/FirebaseApi';
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import {RNCamera} from 'react-native-camera';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {Notifier, Easing, NotifierComponents} from 'react-native-notifier';
+import {showNotification} from '../utils/ShowNotification';
 
 const DATA = [
   {id: uuid.v4(), title: 'Sumokėjau už medieną', interval: '00:04:01'},
@@ -54,6 +57,7 @@ const TaskScreen = item => {
   const [sortBy, setSortBy] = useState(['id', 'title']);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisible2, setIsModalVisible2] = useState(false);
+  const [flashOn, setFlashOn] = useState(false);
   const [barcode, setBarcode] = useState('');
   const [modalInputText, setModalInputText] = useState('');
   const [editItem, setEditItem] = useState();
@@ -64,7 +68,7 @@ const TaskScreen = item => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const buttonLocale = useState(new Animated.ValueXY({x: -270, y: 0}))[0];
 
-  const toggle = () => {
+  const toggle = item => {
     setIsActive(!isActive);
     moveButton();
     if (isActive) {
@@ -144,6 +148,17 @@ const TaskScreen = item => {
     if (isModalVisible2) {
       setIsModalVisible2(false);
     }
+  };
+
+  const onSuccessScan = item => {
+    setIsModalVisible2(false);
+    console.log(item);
+    showNotification({
+      title: 'Good!',
+      text: 'Scanned successfully ',
+      type: 'success',
+    });
+    toggle();
   };
 
   const goBackFn = () => {
@@ -227,21 +242,25 @@ const TaskScreen = item => {
         visible={isModalVisible2}
         onRequestClose={() => setIsModalVisible2(false)}>
         <View style={[styles.modalView, {backgroundColor: 'black'}]}>
-          <QRCodeScanner
-            onRead={() => setIsModalVisible2(false)}
-            fadeIn={true}
-            containerStyle={{}}
-            showMarker={true}
-            markerStyle={{borderColor: 'goldenrod'}}
-          />
-          <TouchableOpacity
-            onPress={() => onPressCancleEdit()}
-            style={[
-              styles.buttonStyle,
-              {backgroundColor: 'darkgrey', marginTop: 0},
-            ]}>
-            <Text style={styles.text}>Cancle</Text>
-          </TouchableOpacity>
+          <Scanner onSuccess={onSuccessScan} flashMode={flashOn} />
+          <View style={styles.buttonsLine}>
+            <TouchableOpacity
+              onPress={() => onPressCancleEdit()}
+              style={[
+                styles.buttonStyle,
+                {backgroundColor: 'goldenrod', marginTop: 0, margin: 10},
+              ]}>
+              <Text style={styles.text}>Cancle</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setFlashOn(!flashOn)}
+              style={[
+                styles.buttonStyle,
+                {backgroundColor: 'darkgrey', marginTop: 0, margin: 10},
+              ]}>
+              <Icon name="flash" size={20} color="snow" />
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
@@ -296,6 +315,11 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  buttonsLine: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 20,
   },
 });
 

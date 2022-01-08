@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const WorkHourItem = ({item, editItem}) => {
   return (
@@ -11,19 +12,8 @@ const WorkHourItem = ({item, editItem}) => {
         </View>
       </View>
       <TouchableOpacity style={styles.listItem} onPress={() => editItem(item)}>
-        <View
-          style={[
-            styles.listItemView,
-            {
-              borderColor: 'goldenrod',
-              borderWidth: 2,
-              borderRadius: 15,
-              padding: 5,
-              paddingRight: 20,
-              marginRight: -30,
-            },
-          ]}>
-          <Text style={styles.listItemTitle}>RENAME</Text>
+        <View style={styles.editButton}>
+          <Icon name="edit" size={25} color="snow" />
         </View>
       </TouchableOpacity>
     </View>
@@ -45,6 +35,13 @@ const styles = StyleSheet.create({
   },
   listItemTitle: {
     fontSize: 18,
+  },
+  editButton: {
+    backgroundColor: 'goldenrod',
+    padding: 10,
+    paddingRight: 20,
+    marginRight: -30,
+    borderRadius: 30,
   },
 });
 

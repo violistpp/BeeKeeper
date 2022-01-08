@@ -4,12 +4,11 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Header = item => {
-  console.log(item);
   return (
     <View style={styles.headerRow}>
       {item.leftFn ? (
         <TouchableOpacity onPress={() => item.leftFn()}>
-          <Icon name="left" size={30} color="snow" />
+          <Icon name="arrowleft" size={30} color="snow" />
         </TouchableOpacity>
       ) : (
         <View style={{margin: 15}} />

@@ -5,9 +5,7 @@ import {
   NotifierComponents,
 } from 'react-native-notifier';
 
-const showNotification = items => {
-  console.log(items);
-  console.log(items.text);
+export const showNotification = items => {
   Notifier.showNotification({
     title: items.title,
     description: items.text,
@@ -17,8 +15,7 @@ const showNotification = items => {
     Component: NotifierComponents.Alert,
     componentProps: {
       alertType: items.type,
+      backgroundColor: 'mediumseagreen',
     },
   });
 };
-
-export default showNotification;

@@ -12,22 +12,23 @@ import TaskItem from '../containers/TaskItem';
 import DateSelection from '../components/DateSelection';
 import DrawLine from '../components/DrawLine';
 import uuid from 'react-native-uuid';
+const DATA = [
+  {id: uuid.v4(), title: 'Suremontuoti rėmelį'},
+  {id: uuid.v4(), title: 'Rėmelių detalių surinkimas'},
+  {id: uuid.v4(), title: 'Medienos paruošimas'},
+  {id: uuid.v4(), title: 'Rėmelių komplektavimas'},
+];
 
 const ProjectScreen = item => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [description, setDescription] = useState('');
-  const [items, setItems] = useState([
-    {id: uuid.v4(), title: 'Suremontuoti rėmelį'},
-    {id: uuid.v4(), title: 'Rėmelių detalių surinkimas'},
-    {id: uuid.v4(), title: 'Medienos paruošimas'},
-    {id: uuid.v4(), title: 'Rėmelių komplektavimas'},
-  ]);
+  const [items, setItems] = useState(DATA);
   const navigation = item.navigation;
 
   return (
     <View style={styles.container}>
-      <Header title={item.route.params.item.title} />
+      <Header title={item.route.params.item.item.title} />
       <Text style={styles.littleHeader}>Term of delivery</Text>
       <DateSelection
         startDate={startDate}
@@ -63,7 +64,7 @@ const ProjectScreen = item => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'floralwhite',
+    backgroundColor: 'snow',
   },
   dateTimeStyle: {
     flex: 1,

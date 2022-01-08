@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   inputView: {
-    backgroundColor: '#fff',
+    backgroundColor: 'snow',
     borderRadius: 30,
     width: '70%',
     height: 45,
@@ -225,6 +225,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {
-    color: 'oldlace',
+    color: 'snow',
   },
 });

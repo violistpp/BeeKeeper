@@ -81,7 +81,7 @@ const ProjectListScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'oldlace',
+    backgroundColor: 'snow',
   },
   signOutButton: {
     height: 30,

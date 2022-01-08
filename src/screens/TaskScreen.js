@@ -19,6 +19,9 @@ import uuid from 'react-native-uuid';
 import ButtonHexagon from '../components/ButtonHexagon';
 import WorkHourItem from '../containers/WorkHourItem';
 import {addWorkHour, getWorkHour} from '../api/FirebaseApi';
+import QRCodeScanner from 'react-native-qrcode-scanner';
+import {RNCamera} from 'react-native-camera';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 const DATA = [
   {id: uuid.v4(), title: 'Sumokėjau už medieną', interval: '00:04:01'},
@@ -50,6 +53,8 @@ const TaskScreen = item => {
   const [items, setItems] = useState(DATA);
   const [sortBy, setSortBy] = useState(['id', 'title']);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible2, setIsModalVisible2] = useState(false);
+  const [barcode, setBarcode] = useState('');
   const [modalInputText, setModalInputText] = useState('');
   const [editItem, setEditItem] = useState();
   const [isRender, setIsRender] = useState(false);
@@ -63,18 +68,6 @@ const TaskScreen = item => {
     setIsActive(!isActive);
     moveButton();
     if (isActive) {
-      // addWorkHour(
-      //   {title: 'new work hour item', id: uuid.v4()},
-      //   onWorkHouradded,
-      // );
-
-      // let taskList = [
-      //   {id: uuid.v4(), title: 'NEW WORK HOUR', interval: '10:07'},
-      // ];
-      // setItems(prevState => ({
-      //   taskList: (prevState.taskList = taskList),
-      // }));
-
       setItems(prevItems => {
         return [
           {
@@ -117,25 +110,14 @@ const TaskScreen = item => {
     }).start();
   }, [fadeAnim, isActive]);
 
-  // useEffect(() => {
-  //   getWorkHour(onTaskReceived);
-  // }, []);
-
-  // const onTaskReceived = taskList => {
-  //   setItems(prevState => ({
-  //     taskList: (prevState.taskList = taskList),
-  //   }));
-  // };
-
-  // const onWorkHouradded = workHour => {
-  //   console.log(workHour);
-  //   console.log('Work Hour added');
-  // };
-
   const editItemFn = item => {
     setIsModalVisible(true);
     setModalInputText(item.title);
     setEditItem(item.id);
+  };
+
+  const scannerFn = () => {
+    setIsModalVisible2(true);
   };
 
   const handleEditItem = editItem => {
@@ -156,12 +138,25 @@ const TaskScreen = item => {
   };
 
   const onPressCancleEdit = () => {
-    setIsModalVisible(false);
+    if (isModalVisible) {
+      setIsModalVisible(false);
+    }
+    if (isModalVisible2) {
+      setIsModalVisible2(false);
+    }
+  };
+
+  const goBackFn = () => {
+    item.navigation.goBack();
   };
 
   return (
     <View style={styles.container}>
-      <Header />
+      <Header
+        title={item.route.params.item.item.title}
+        leftFn={goBackFn}
+        rightFn={scannerFn}
+      />
       <Text style={styles.littleHeader}>Term of delivery</Text>
       <DateSelection
         startDate={startDate}
@@ -228,6 +223,27 @@ const TaskScreen = item => {
           </TouchableOpacity>
         </View>
       </Modal>
+      <Modal
+        visible={isModalVisible2}
+        onRequestClose={() => setIsModalVisible2(false)}>
+        <View style={[styles.modalView, {backgroundColor: 'black'}]}>
+          <QRCodeScanner
+            onRead={() => setIsModalVisible2(false)}
+            fadeIn={true}
+            containerStyle={{}}
+            showMarker={true}
+            markerStyle={{borderColor: 'goldenrod'}}
+          />
+          <TouchableOpacity
+            onPress={() => onPressCancleEdit()}
+            style={[
+              styles.buttonStyle,
+              {backgroundColor: 'darkgrey', marginTop: 0},
+            ]}>
+            <Text style={styles.text}>Cancle</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -235,7 +251,7 @@ const TaskScreen = item => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'floralwhite',
+    backgroundColor: 'snow',
   },
   littleHeader: {
     alignSelf: 'center',
@@ -280,12 +296,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  touchableSave: {
-    backgroundColor: 'goldenrod',
-    paddingHorizontal: 100,
-    alignItems: 'center',
-    marginTop: 20,
   },
 });
 

@@ -1,16 +1,27 @@
 import React from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
+import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const Header = ({title}) => {
+const Header = item => {
+  console.log(item);
   return (
     <View style={styles.headerRow}>
-      {/* <TouchableOpacity onPress={() => {}}>
-        <Text style={styles.optionLeft}>{'<'}</Text>
-      </TouchableOpacity> */}
-      <Text style={styles.titleText}>{title}</Text>
-      {/* <TouchableOpacity>
-        <Text style={styles.optionRight}>+</Text>
-      </TouchableOpacity> */}
+      {item.leftFn ? (
+        <TouchableOpacity onPress={() => item.leftFn()}>
+          <Icon name="left" size={30} color="snow" />
+        </TouchableOpacity>
+      ) : (
+        <View style={{margin: 15}} />
+      )}
+      <Text style={styles.titleText}>{item.title}</Text>
+      {item.rightFn ? (
+        <TouchableOpacity onPress={() => item.rightFn()}>
+          <Icon2 name="barcode-scan" size={30} color="snow" />
+        </TouchableOpacity>
+      ) : (
+        <View style={{margin: 15}} />
+      )}
     </View>
   );
 };
@@ -21,8 +32,8 @@ Header.defaultProps = {
 
 const styles = StyleSheet.create({
   headerRow: {
-    // flexDirection: 'row',
-    // justifyContent: 'space-between',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     width: '100%',
     height: 60,
     padding: 15,

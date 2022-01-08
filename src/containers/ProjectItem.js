@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   listItem: {
+    flex: 1,
     backgroundColor: 'snow', //floralwhite
   },
   listItemView: {

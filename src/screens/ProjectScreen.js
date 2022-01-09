@@ -6,6 +6,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import Header from '../containers/Header';
 import TaskItem from '../containers/TaskItem';
@@ -24,7 +25,40 @@ const ProjectScreen = item => {
   const [endDate, setEndDate] = useState(new Date());
   const [description, setDescription] = useState('');
   const [items, setItems] = useState(DATA);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalInputText, setModalInputText] = useState('');
+  const [isRender, setIsRender] = useState(false);
+  const [editItem, setEditItem] = useState();
   const navigation = item.navigation;
+
+  const deleteItem = id => {
+    setItems(prevItems => {
+      return prevItems.filter(item => item.id !== id);
+    });
+  };
+
+  const editItemFn = item => {
+    setIsModalVisible(true);
+    setModalInputText(item.title);
+    setEditItem(item.id);
+  };
+
+  const handleEditItem = editItem => {
+    const newData = items.map(item => {
+      if (item.id == editItem) {
+        item.title = modalInputText;
+        return item;
+      }
+      return item;
+    });
+    setItems(newData);
+    setIsRender(!isRender);
+  };
+
+  const onPressSaveEdit = () => {
+    handleEditItem(editItem);
+    setIsModalVisible(false);
+  };
 
   return (
     <View style={styles.container}>
@@ -53,10 +87,45 @@ const ProjectScreen = item => {
       <FlatList
         data={items}
         renderItem={({item}) => (
-          <TaskItem item={item} navigation={navigation} />
+          <TaskItem
+            item={item}
+            navigation={navigation}
+            deleteItem={deleteItem}
+            editItem={editItemFn}
+          />
         )}
       />
       <DrawLine />
+      <Modal
+        animationType="fade"
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>Change Title: </Text>
+          <TextInput
+            style={styles.modalTextInput}
+            onChangeText={text => setModalInputText(text)}
+            defaultValue={modalInputText}
+            editable={true}
+            maxLength={200}
+          />
+          <View style={styles.buttonsLine}>
+            <TouchableOpacity
+              onPress={() => onPressSaveEdit()}
+              style={[
+                styles.buttonStyle,
+                {backgroundColor: 'goldenrod', marginRight: 5},
+              ]}>
+              <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setIsModalVisible(false)}
+              style={[styles.buttonStyle, {backgroundColor: 'darkgrey'}]}>
+              <Text style={styles.buttonText}>Cancle</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -74,6 +143,42 @@ const styles = StyleSheet.create({
   littleHeader: {
     alignSelf: 'center',
     paddingVertical: 5,
+  },
+  modalText: {
+    fontSize: 20,
+    marginBottom: 10,
+  },
+  modalTextInput: {
+    width: '90%',
+    height: 70,
+    borderColor: 'goldenrod',
+    borderWidth: 1,
+    fontSize: 18,
+    borderRadius: 30,
+    padding: 15,
+    marginBottom: 20,
+  },
+  modalView: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonsLine: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingBottom: 20,
+  },
+  buttonText: {
+    color: 'snow',
+    fontSize: 18,
+  },
+  buttonStyle: {
+    paddingHorizontal: 30,
+    borderRadius: 25,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
   },
 });
 

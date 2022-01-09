@@ -12,10 +12,12 @@ export const showNotification = items => {
     duration: 10000,
     showAnimationDuration: 800,
     showEasing: Easing.bounce,
-    Component: NotifierComponents.Alert,
+    Component: NotifierComponents.Notification,
     componentProps: {
       alertType: items.type,
-      backgroundColor: 'mediumseagreen',
+      containerStyle: {backgroundColor: 'mediumseagreen'},
+      descriptionStyle: {color: 'snow'},
+      titleStyle: {color: 'snow'},
     },
   });
 };

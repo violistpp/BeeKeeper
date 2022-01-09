@@ -11,7 +11,7 @@ const WorkHourItem = ({item, editItem}) => {
           <Text style={styles.listItemTitle}>{item.interval}</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.listItem} onPress={() => editItem(item)}>
+      <TouchableOpacity onPress={() => editItem(item)}>
         <View style={styles.editButton}>
           <Icon name="edit" size={25} color="snow" />
         </View>
@@ -25,10 +25,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    backgroundColor: 'snow',
   },
   listItem: {
     padding: 15,
-    backgroundColor: 'snow',
   },
   listItemView: {
     justifyContent: 'space-between',
@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   editButton: {
-    backgroundColor: 'goldenrod',
     padding: 10,
-    paddingRight: 20,
+    backgroundColor: 'goldenrod',
+    paddingRight: 35,
     marginRight: -30,
     borderRadius: 30,
   },

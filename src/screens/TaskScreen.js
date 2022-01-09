@@ -64,9 +64,10 @@ const TaskScreen = item => {
   const [isRender, setIsRender] = useState(false);
   const [remainingSecs, setRemainingSecs] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  const [newItem, setNewItem] = useState();
   const {hours, mins, secs} = getRemaining(remainingSecs);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const buttonLocale = useState(new Animated.ValueXY({x: -270, y: 0}))[0];
+  const buttonLocale = useState(new Animated.ValueXY({x: -230, y: 0}))[0];
 
   const toggle = item => {
     setIsActive(!isActive);
@@ -76,7 +77,7 @@ const TaskScreen = item => {
         return [
           {
             id: uuid.v4(),
-            title: 'NEW WORK HOUR',
+            title: newItem ? newItem : 'NEW WORK HOUR',
             interval: `${hours}:${mins}:${secs}`,
           },
           ...prevItems,
@@ -88,7 +89,7 @@ const TaskScreen = item => {
 
   function moveButton() {
     Animated.timing(buttonLocale, {
-      toValue: {x: isActive ? -270 : 0, y: 0},
+      toValue: {x: isActive ? -230 : 0, y: 0},
       duration: 700,
       useNativeDriver: false,
     }).start();
@@ -151,8 +152,9 @@ const TaskScreen = item => {
   };
 
   const onSuccessScan = item => {
+    let itemData = JSON.parse(item.data);
+    setNewItem(itemData.description);
     setIsModalVisible2(false);
-    console.log(item);
     showNotification({
       title: 'Good!',
       text: 'Scanned successfully ',
@@ -171,6 +173,7 @@ const TaskScreen = item => {
         title={item.route.params.item.item.title}
         leftFn={goBackFn}
         rightFn={scannerFn}
+        isActive={isActive}
       />
       <Text style={styles.littleHeader}>Term of delivery</Text>
       <DateSelection
@@ -226,16 +229,21 @@ const TaskScreen = item => {
             editable={true}
             maxLength={200}
           />
-          <TouchableOpacity
-            onPress={() => onPressSaveEdit()}
-            style={[styles.buttonStyle, {backgroundColor: 'goldenrod'}]}>
-            <Text style={styles.text}>Save</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => onPressCancleEdit()}
-            style={[styles.buttonStyle, {backgroundColor: 'darkgrey'}]}>
-            <Text style={styles.text}>Cancle</Text>
-          </TouchableOpacity>
+          <View style={styles.buttonsLine}>
+            <TouchableOpacity
+              onPress={() => onPressSaveEdit()}
+              style={[
+                styles.buttonStyle,
+                {backgroundColor: 'goldenrod', marginRight: 5},
+              ]}>
+              <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => onPressCancleEdit()}
+              style={[styles.buttonStyle, {backgroundColor: 'darkgrey'}]}>
+              <Text style={styles.buttonText}>Cancle</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
       <Modal
@@ -250,7 +258,7 @@ const TaskScreen = item => {
                 styles.buttonStyle,
                 {backgroundColor: 'goldenrod', marginTop: 0, margin: 10},
               ]}>
-              <Text style={styles.text}>Cancle</Text>
+              <Text style={styles.buttonText}>Cancle</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setFlashOn(!flashOn)}
@@ -302,14 +310,17 @@ const styles = StyleSheet.create({
   },
   modalText: {
     fontSize: 20,
+    marginBottom: 10,
   },
   modalTextInput: {
     width: '90%',
     height: 70,
     borderColor: 'goldenrod',
     borderWidth: 1,
-    fontSize: 25,
-    marginTop: 10,
+    fontSize: 18,
+    borderRadius: 30,
+    padding: 15,
+    marginBottom: 20,
   },
   modalView: {
     flex: 1,
@@ -320,6 +331,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingBottom: 20,
+  },
+  buttonText: {
+    color: 'snow',
+    fontSize: 18,
   },
 });
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,9 +14,9 @@ const Header = item => {
         <View style={{margin: 15}} />
       )}
       <Text style={styles.titleText}>{item.title}</Text>
-      {item.rightFn ? (
+      {item.rightFn && !item.isActive ? (
         <TouchableOpacity onPress={() => item.rightFn()}>
-          <Icon2 name="barcode-scan" size={30} color="snow" />
+          <Icon2 name="qrcode-scan" size={30} color="snow" />
         </TouchableOpacity>
       ) : (
         <View style={{margin: 15}} />

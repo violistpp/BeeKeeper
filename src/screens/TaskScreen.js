@@ -65,7 +65,7 @@ const TaskScreen = item => {
   const [newItem, setNewItem] = useState();
   const {hours, mins, secs} = getRemaining(remainingSecs);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const buttonLocale = useState(new Animated.ValueXY({x: -270, y: 0}))[0];
+  const buttonLocale = useState(new Animated.ValueXY({x: -230, y: 0}))[0];
 
   const toggle = () => {
     setIsActive(!isActive);
@@ -87,7 +87,7 @@ const TaskScreen = item => {
 
   function moveButton() {
     Animated.timing(buttonLocale, {
-      toValue: {x: isActive ? -270 : 0, y: 0},
+      toValue: {x: isActive ? -230 : 0, y: 0},
       duration: 700,
       useNativeDriver: false,
     }).start();

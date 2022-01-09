@@ -25,7 +25,7 @@ const LoginScreen = () => {
   // Buttons movement
   function moveBackButton() {
     setTimeout(
-      () => setLoginButtontext(isSignIn ? 'REGISTUORIS' : 'PRISIJUNGTI'),
+      () => setLoginButtontext(isSignIn ? 'KURTI PASKYRĄ' : 'PRISIJUNGTI'),
       400,
     );
     Animated.timing(regLogTransliation, {
@@ -139,7 +139,7 @@ const LoginScreen = () => {
         </Animated.View>
         <Animated.View
           style={{
-            flex: 3,
+            flex: 4,
             transform: [
               {
                 translateX: regLogTransliation.interpolate({

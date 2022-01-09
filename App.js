@@ -16,7 +16,6 @@ import {
 } from 'react-native-notifier';
 import * as Keychain from 'react-native-keychain';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import showNotification from './src/utils/ShowNotification';
 
 const Stack = createNativeStackNavigator();
 

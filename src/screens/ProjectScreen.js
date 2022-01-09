@@ -63,7 +63,7 @@ const ProjectScreen = item => {
   return (
     <View style={styles.container}>
       <Header title={item.route.params.item.item.title} />
-      <Text style={styles.littleHeader}>Term of delivery</Text>
+      <Text style={styles.littleHeader}>Projekto pradžia / pabaiga</Text>
       <DateSelection
         startDate={startDate}
         setStartDate={setStartDate}
@@ -71,7 +71,7 @@ const ProjectScreen = item => {
         setEndDate={setEndDate}
       />
       <DrawLine />
-      <Text style={styles.littleHeader}>Description</Text>
+      <Text style={styles.littleHeader}>Aprašymas</Text>
       <TextInput
         multiline
         editable
@@ -79,11 +79,11 @@ const ProjectScreen = item => {
         numberOfLines={4}
         onChangeText={text => setDescription(text)}
         value={description}
-        placeholder="description..."
+        placeholder="Projekto aprašymas..."
         style={{paddingHorizontal: 20}}
       />
       <DrawLine />
-      <Text style={styles.littleHeader}>Tasks ({items.length})</Text>
+      <Text style={styles.littleHeader}>Užduotys ({items.length})</Text>
       <FlatList
         data={items}
         renderItem={({item}) => (
@@ -101,7 +101,7 @@ const ProjectScreen = item => {
         visible={isModalVisible}
         onRequestClose={() => setIsModalVisible(false)}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Change Title: </Text>
+          <Text style={styles.modalText}>Keisti pavadinimą: </Text>
           <TextInput
             style={styles.modalTextInput}
             onChangeText={text => setModalInputText(text)}
@@ -116,12 +116,12 @@ const ProjectScreen = item => {
                 styles.buttonStyle,
                 {backgroundColor: 'goldenrod', marginRight: 5},
               ]}>
-              <Text style={styles.buttonText}>Save</Text>
+              <Text style={styles.buttonText}>Išsaugoti</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setIsModalVisible(false)}
               style={[styles.buttonStyle, {backgroundColor: 'darkgrey'}]}>
-              <Text style={styles.buttonText}>Cancle</Text>
+              <Text style={styles.buttonText}>Atšaukti</Text>
             </TouchableOpacity>
           </View>
         </View>

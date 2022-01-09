@@ -1,12 +1,13 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const ButtonHexagon = ({toggle, isActive}) => {
   return (
     <TouchableOpacity onPress={() => toggle()}>
       <View style={styles.hexagon}>
         <View style={styles.hexagonInner}>
-          <Text style={styles.buttonName}>{isActive ? 'Stop' : 'Start'}</Text>
+          <Icon name={!isActive ? 'play' : 'stop'} size={45} color="snow" />
         </View>
         <View style={styles.hexagonBefore} />
         <View style={styles.hexagonAfter} />

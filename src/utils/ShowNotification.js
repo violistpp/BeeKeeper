@@ -1,9 +1,4 @@
-import {
-  NotifierWrapper,
-  Notifier,
-  Easing,
-  NotifierComponents,
-} from 'react-native-notifier';
+import {Notifier, Easing, NotifierComponents} from 'react-native-notifier';
 
 export const showNotification = items => {
   Notifier.showNotification({
@@ -15,7 +10,10 @@ export const showNotification = items => {
     Component: NotifierComponents.Notification,
     componentProps: {
       alertType: items.type,
-      containerStyle: {backgroundColor: 'mediumseagreen'},
+      containerStyle: {
+        backgroundColor:
+          items.type === 'success' ? 'mediumseagreen' : 'indianred',
+      },
       descriptionStyle: {color: 'snow'},
       titleStyle: {color: 'snow'},
     },

@@ -15,7 +15,7 @@ const LoginScreen = () => {
   const [username, setUsername] = useState('test@test.lt');
   const [password, setPassword] = useState('testest');
   const [repeatPassword, setRepeatPassword] = useState('');
-  const [loginButtontext, setLoginButtontext] = useState('LOGIN');
+  const [loginButtontext, setLoginButtontext] = useState('PRISIJUNGTI');
   const [isSignIn, setIsSignIn] = useState(true);
   // Animated variable
   const regLogTransliation = useRef(new Animated.Value(1)).current;
@@ -24,7 +24,10 @@ const LoginScreen = () => {
 
   // Buttons movement
   function moveBackButton() {
-    setTimeout(() => setLoginButtontext(isSignIn ? 'CREATE' : 'LOGIN'), 400);
+    setTimeout(
+      () => setLoginButtontext(isSignIn ? 'REGISTUORIS' : 'PRISIJUNGTI'),
+      400,
+    );
     Animated.timing(regLogTransliation, {
       toValue: isSignIn ? 0 : 1,
       duration: 800,
@@ -68,18 +71,18 @@ const LoginScreen = () => {
               setIsSignIn(true);
               moveBackButton();
             }}>
-            <Text style={styles.buttonText}>BACK TO LOGIN</Text>
+            <Text style={styles.buttonText}>GRIŽTI</Text>
           </TouchableOpacity>
         </Animated.View>
       </View>
       <Text style={styles.headerText}>
-        {isSignIn ? 'LOGIN' : 'REGISTRATION'}
+        {isSignIn ? 'PRISIJUNGIMAS' : 'REGISTRACIJA'}
       </Text>
       <View style={styles.inputTextContainer}>
         <View style={styles.inputView}>
           <TextInput
             style={styles.textInput}
-            placeholder="Username"
+            placeholder="Prisijungimo vardas"
             value={username}
             onChangeText={setUsername}
             autoCapitalize="none"
@@ -88,7 +91,7 @@ const LoginScreen = () => {
         <View style={styles.inputView}>
           <TextInput
             style={styles.textInput}
-            placeholder="Password"
+            placeholder="Slaptažodis"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
@@ -96,16 +99,12 @@ const LoginScreen = () => {
           />
         </View>
         {isSignIn ? (
-          <View style={{height: 45}}>
-            <TouchableOpacity>
-              <Text>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
+          <View style={{height: 45}} />
         ) : (
           <View style={styles.inputView}>
             <TextInput
               style={styles.textInput}
-              placeholder="Repeat password"
+              placeholder="Pakartoti slaptažodį"
               value={repeatPassword}
               onChangeText={setRepeatPassword}
               secureTextEntry
@@ -119,7 +118,7 @@ const LoginScreen = () => {
         <View style={{flex: 1}}></View>
         <Animated.View
           style={{
-            flex: 3,
+            flex: 4,
             transform: [
               {
                 translateX: regLogTransliation.interpolate({
@@ -135,12 +134,12 @@ const LoginScreen = () => {
               setIsSignIn(false);
               moveBackButton();
             }}>
-            <Text style={styles.buttonText}>REGISTRATE</Text>
+            <Text style={styles.buttonText}>REGISTRUOTIS</Text>
           </TouchableOpacity>
         </Animated.View>
         <Animated.View
           style={{
-            flex: 2,
+            flex: 3,
             transform: [
               {
                 translateX: regLogTransliation.interpolate({
@@ -197,8 +196,8 @@ const styles = StyleSheet.create({
     height: 50,
     flex: 1,
     padding: 10,
-    paddingHorizontal: 20,
     color: 'darkgrey',
+    alignItems: 'center',
   },
   buttonContainer: {
     flexDirection: 'row',

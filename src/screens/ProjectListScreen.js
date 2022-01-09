@@ -74,12 +74,13 @@ const ProjectListScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      <Header title="All Projects" />
+      <Header title="Projektų sąrašas" />
       <AddItem
         addItem={addItem}
         inputText={inputText}
         setInputText={setInputText}
       />
+      <View style={{marginBottom: 10}} />
       <FlatList
         data={items.sort((a, b) => {
           return a[sortBy[1]] > b[sortBy[1]];
@@ -89,12 +90,13 @@ const ProjectListScreen = ({navigation}) => {
             item={item}
             deleteItem={deleteItem}
             navigation={navigation}
+            editItem={editItemFn}
           />
         )}
       />
       <TouchableOpacity onPress={signOut}>
         <View style={styles.signOutButton}>
-          <Text style={styles.signOutText}>Sign out</Text>
+          <Text style={styles.signOutText}>Atsijungti</Text>
         </View>
       </TouchableOpacity>
       <Modal
@@ -102,7 +104,7 @@ const ProjectListScreen = ({navigation}) => {
         visible={isModalVisible}
         onRequestClose={() => setIsModalVisible(false)}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Change Title: </Text>
+          <Text style={styles.modalText}>Keisti pavadinimą: </Text>
           <TextInput
             style={styles.modalTextInput}
             onChangeText={text => setModalInputText(text)}
@@ -117,12 +119,12 @@ const ProjectListScreen = ({navigation}) => {
                 styles.buttonStyle,
                 {backgroundColor: 'goldenrod', marginRight: 5},
               ]}>
-              <Text style={styles.buttonText}>Save</Text>
+              <Text style={styles.buttonText}>Išsaugoti</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setIsModalVisible(false)}
               style={[styles.buttonStyle, {backgroundColor: 'darkgrey'}]}>
-              <Text style={styles.buttonText}>Cancle</Text>
+              <Text style={styles.buttonText}>Atšaukti</Text>
             </TouchableOpacity>
           </View>
         </View>

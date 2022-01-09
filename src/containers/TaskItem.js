@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   removeButton: {
     padding: 10,
-    backgroundColor: 'goldenrod',
+    backgroundColor: 'darkgrey',
     paddingRight: 35,
     marginRight: -30,
     borderRadius: 30,

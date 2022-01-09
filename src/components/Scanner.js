@@ -10,10 +10,6 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 // console.disableYellowBox = true;
 
 const Scanner = item => {
-  const onSuccess = err => {
-    item.onSuccess(err);
-  };
-
   return (
     <QRCodeScanner
       flashMode={
@@ -22,13 +18,12 @@ const Scanner = item => {
           : RNCamera.Constants.FlashMode.off
       }
       showMarker
+      reactivateTimeout={2000}
       onRead={item.onSuccess}
       cameraStyle={{height: SCREEN_HEIGHT}}
       customMarker={
         <View style={styles.rectangleContainer}>
-          <View style={styles.topOverlay}>
-            <Text style={{fontSize: 30, color: 'white'}}>QR CODE SCANNER</Text>
-          </View>
+          <View style={styles.topOverlay} />
 
           <View style={{flexDirection: 'row'}}>
             <View style={styles.leftAndRightOverlay} />

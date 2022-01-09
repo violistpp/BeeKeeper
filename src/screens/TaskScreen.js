@@ -54,11 +54,9 @@ const TaskScreen = item => {
   const [endTime, setEndTime] = useState(new Date());
   const [description, setDescription] = useState('');
   const [items, setItems] = useState(DATA);
-  const [sortBy, setSortBy] = useState(['id', 'title']);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isModalVisible2, setIsModalVisible2] = useState(false);
   const [flashOn, setFlashOn] = useState(false);
-  const [barcode, setBarcode] = useState('');
   const [modalInputText, setModalInputText] = useState('');
   const [editItem, setEditItem] = useState();
   const [isRender, setIsRender] = useState(false);
@@ -67,9 +65,9 @@ const TaskScreen = item => {
   const [newItem, setNewItem] = useState();
   const {hours, mins, secs} = getRemaining(remainingSecs);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const buttonLocale = useState(new Animated.ValueXY({x: -230, y: 0}))[0];
+  const buttonLocale = useState(new Animated.ValueXY({x: -270, y: 0}))[0];
 
-  const toggle = item => {
+  const toggle = () => {
     setIsActive(!isActive);
     moveButton();
     if (isActive) {
@@ -77,7 +75,7 @@ const TaskScreen = item => {
         return [
           {
             id: uuid.v4(),
-            title: newItem ? newItem : 'NEW WORK HOUR',
+            title: newItem ? newItem : 'DARBO LAIKO SKAIČIAVIMAS',
             interval: `${hours}:${mins}:${secs}`,
           },
           ...prevItems,
@@ -89,7 +87,7 @@ const TaskScreen = item => {
 
   function moveButton() {
     Animated.timing(buttonLocale, {
-      toValue: {x: isActive ? -230 : 0, y: 0},
+      toValue: {x: isActive ? -270 : 0, y: 0},
       duration: 700,
       useNativeDriver: false,
     }).start();
@@ -152,15 +150,33 @@ const TaskScreen = item => {
   };
 
   const onSuccessScan = item => {
-    let itemData = JSON.parse(item.data);
-    setNewItem(itemData.description);
-    setIsModalVisible2(false);
-    showNotification({
-      title: 'Good!',
-      text: 'Scanned successfully ',
-      type: 'success',
-    });
-    toggle();
+    if (item.data) {
+      try {
+        let itemData = JSON.parse(item.data);
+        setNewItem(itemData.description);
+        setIsModalVisible2(false);
+        showNotification({
+          title: 'Puiku!',
+          text: 'Kodas ' + itemData.title + ' sėkmingai nuskenuotas ',
+          type: 'success',
+        });
+        toggle();
+      } catch (error) {
+        showNotification({
+          title: 'Kažkas netaip!',
+          text: 'Kodas nepriklauso šiai programėlei.',
+          type: 'error',
+        });
+        setIsModalVisible2(false);
+      }
+    } else {
+      showNotification({
+        title: 'Kažkas netaip!',
+        text: 'Kodas nepiklauso darbo laiko įrašui kurti',
+        type: 'error',
+      });
+      setIsModalVisible2(false);
+    }
   };
 
   const goBackFn = () => {
@@ -175,7 +191,7 @@ const TaskScreen = item => {
         rightFn={scannerFn}
         isActive={isActive}
       />
-      <Text style={styles.littleHeader}>Term of delivery</Text>
+      <Text style={styles.littleHeader}>Užduoties pradžia / pabaiga</Text>
       <DateSelection
         startDate={startDate}
         setStartDate={setStartDate}
@@ -189,7 +205,7 @@ const TaskScreen = item => {
         setEndTime={setEndTime}
       />
       <DrawLine />
-      <Text style={styles.littleHeader}>Description</Text>
+      <Text style={styles.littleHeader}>Aprašymas</Text>
       <TextInput
         multiline
         editable
@@ -197,7 +213,7 @@ const TaskScreen = item => {
         numberOfLines={4}
         onChangeText={text => setDescription(text)}
         value={description}
-        placeholder="description..."
+        placeholder="Užduoties aprašymas..."
         style={{paddingHorizontal: 20}}
       />
       <View style={styles.actionContainer}>
@@ -221,7 +237,7 @@ const TaskScreen = item => {
         visible={isModalVisible}
         onRequestClose={() => setIsModalVisible(false)}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Change Title: </Text>
+          <Text style={styles.modalText}>Keisti pavadinimą: </Text>
           <TextInput
             style={styles.modalTextInput}
             onChangeText={text => setModalInputText(text)}
@@ -236,12 +252,12 @@ const TaskScreen = item => {
                 styles.buttonStyle,
                 {backgroundColor: 'goldenrod', marginRight: 5},
               ]}>
-              <Text style={styles.buttonText}>Save</Text>
+              <Text style={styles.buttonText}>Išsaugoti</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => onPressCancleEdit()}
               style={[styles.buttonStyle, {backgroundColor: 'darkgrey'}]}>
-              <Text style={styles.buttonText}>Cancle</Text>
+              <Text style={styles.buttonText}>Atšaukti</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -258,7 +274,7 @@ const TaskScreen = item => {
                 styles.buttonStyle,
                 {backgroundColor: 'goldenrod', marginTop: 0, margin: 10},
               ]}>
-              <Text style={styles.buttonText}>Cancle</Text>
+              <Text style={styles.buttonText}>Atšaukti</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => setFlashOn(!flashOn)}

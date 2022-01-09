@@ -6,6 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/AntDesign';
 
 const AddItem = ({addItem, inputText, setInputText}) => {
   const onChange = textValue => setInputText(textValue);
@@ -14,14 +15,14 @@ const AddItem = ({addItem, inputText, setInputText}) => {
     <View style={styles.container}>
       <TextInput
         value={inputText}
-        placeholder="Add New Project..."
+        placeholder="Sukurti naują projektą..."
         onChangeText={onChange}
         style={styles.input}
       />
       <TouchableOpacity
         onPress={() => addItem(inputText)}
         style={styles.addBtn}>
-        <Text style={styles.btnText}>Add</Text>
+        <Icon name="addfolder" size={25} color="goldenrod" />
       </TouchableOpacity>
     </View>
   );
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
     width: '20%',
     marginLeft: 1,
     paddingLeft: -5,
-    backgroundColor: 'goldenrod',
+    // backgroundColor: 'goldenrod',
     padding: 9,
     margin: 5,
     borderRadius: 30,
